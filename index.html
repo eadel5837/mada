@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدى | MADA</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://googleapis.com" rel="stylesheet">
+</head>
+<body>
+
+    <!-- الهيدر والقائمة -->
+    <header>
+        <div class="logo">مدى <span>| MADA</span></div>
+        <nav>
+            <a href="#ai-studio">غرفة القياس الذكية</a>
+            <a href="#collection">تشكيلة مدى</a>
+        </nav>
+        <div class="cart-btn" onclick="toggleCart()">
+            🛒 السلة (<span id="cart-count">0</span>)
+        </div>
+    </header>
+
+    <!-- الواجهة الرئيسية -->
+    <section class="hero">
+        <h1>أناقتك في مدى.. جربها قبل ما تشتريها</h1>
+        <p>تشكيلة مميزة من الهودي، السويت بانتس، والسوتات الحريمي. ارفع صورتك وجرب استايلك بالذكاء الاصطناعي.</p>
+        <a href="#ai-studio" class="cta-btn">جرب طقمك بالـ AI</a>
+    </section>
+
+    <!-- قسم الذكاء الاصطناعي (Virtual Try-On) -->
+    <section id="ai-studio" class="ai-section">
+        <h2>✨ غرفة القياس الافتراضية (Mada AI)</h2>
+        <div class="ai-container">
+            <div class="upload-box">
+                <input type="file" id="user-photo" accept="image/*" hidden onchange="previewImage(event)">
+                <label for="user-photo" class="upload-label">
+                    <span id="upload-text">📸 اضغط هنا لرفع صورتك</span>
+                    <img id="preview-img" src="" alt="صورتك" style="display:none;">
+                </label>
+                <button class="ai-action-btn" onclick="simulateAI()">اقتراح طقم مناسب من مدى</button>
+            </div>
+            <div class="ai-result" id="ai-result-box">
+                <h3>ترشيحات الـ AI ليك</h3>
+                <p id="ai-status">ارفع صورتك عشان نختارلك أنسب قطعة من تشكيلة مدى...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المنتجات -->
+    <section id="collection" class="products-section">
+        <h2>تشكيلة مدى</h2>
+        
+        <!-- أزرار الفلترة -->
+        <div class="filter-btns">
+            <button class="filter-btn active" onclick="filterProducts('all')">الكل</button>
+            <button class="filter-btn" onclick="filterProducts('men')">رجالي</button>
+            <button class="filter-btn" onclick="filterProducts('women')">حريمي</button>
+            <button class="filter-btn" onclick="filterProducts('suits')">سوتات حريمي</button>
+        </div>
+
+        <div class="products-grid" id="products-grid">
+            <!-- المنتجات هتظهر هنا -->
+        </div>
+    </section>
+
+    <!-- سلة المشتريات الجانبية + فورم الشحن -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>سلة مشتريات مدى</h3>
+            <span class="close-cart" onclick="toggleCart()">✖</span>
+        </div>
+        
+        <div class="cart-items" id="cart-items">
+            <p>السلة فاضية حالياً</p>
+        </div>
+
+        <div class="cart-footer">
+            <h4>الإجمالي: <span id="cart-total">0</span> ج.م</h4>
+            
+            <!-- فورم بيانات الشحن -->
+            <div class="shipping-form">
+                <input type="text" id="customer-name" placeholder="الاسم بالكامل">
+                <input type="tel" id="customer-phone" placeholder="رقم الموبايل (واتساب)">
+                <input type="text" id="customer-address" placeholder="المحافظة والعنوان بالتفصيل">
+            </div>
+
+            <button class="checkout-btn" onclick="checkout()">تأكيد الأوردر بأمان 🔒</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

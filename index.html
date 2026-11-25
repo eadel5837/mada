@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مدى | MADA</title>
+    <title>مدى | MADA Official Store</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://googleapis.com" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- الهيدر والقائمة -->
+    <!-- الهيدر الفخم -->
     <header>
-        <div class="logo">مدى <span>| MADA</span></div>
+        <div class="logo">
+            <span class="ar-brand">مدى</span>
+            <span class="divider">|</span>
+            <span class="en-brand">MADA</span>
+        </div>
         <nav>
-            <a href="#ai-studio">غرفة القياس الذكية</a>
-            <a href="#collection">تشكيلة مدى</a>
+            <a href="#ai-studio">غرفة القياس الذكية AI</a>
+            <a href="#collection">التشكيلة الكاملة</a>
         </nav>
         <div class="cart-btn" onclick="toggleCart()">
             🛒 السلة (<span id="cart-count">0</span>)
@@ -23,33 +29,66 @@
 
     <!-- الواجهة الرئيسية -->
     <section class="hero">
-        <h1>أناقتك في مدى.. جربها قبل ما تشتريها</h1>
-        <p>تشكيلة مميزة من الهودي، السويت بانتس، والسوتات الحريمي. ارفع صورتك وجرب استايلك بالذكاء الاصطناعي.</p>
-        <a href="#ai-studio" class="cta-btn">جرب طقمك بالـ AI</a>
+        <div class="hero-badge">تشكيلة الشتاء والخريف الجديدة ✨</div>
+        <h1>أناقتك في <span class="highlight">مدى</span>.. جربها قبل ما تشتريها</h1>
+        <p>تصميمات عصرية بخامات فاخرة من الهودي، السويت بانتس، والسوتات الحريمي. ارفع صورتك وحدد قياساتك وسيب الذكاء الاصطناعي ينسقلك طقمك.</p>
+        <div class="hero-btns">
+            <a href="#ai-studio" class="cta-btn">جرب طقمك بالـ AI الآن</a>
+            <a href="#collection" class="secondary-btn">تصفح المنتجات</a>
+        </div>
     </section>
 
-    <!-- قسم الذكاء الاصطناعي (Virtual Try-On) -->
+    <!-- قسم الذكاء الاصطناعي المطور -->
     <section id="ai-studio" class="ai-section">
-        <h2>✨ غرفة القياس الافتراضية (Mada AI)</h2>
+        <div class="section-header">
+            <h2>✨ غرفة القياس الذكية (MADA AI Studio)</h2>
+            <p>ارفع صورتك ودخل بيانات جسمك عشان نحدد مقاسك المثالي ونرشحلك أطقم متناسقة</p>
+        </div>
+
         <div class="ai-container">
+            <!-- مربع الصورة وبيانات الجسم -->
             <div class="upload-box">
                 <input type="file" id="user-photo" accept="image/*" hidden onchange="previewImage(event)">
                 <label for="user-photo" class="upload-label">
-                    <span id="upload-text">📸 اضغط هنا لرفع صورتك</span>
+                    <span id="upload-text">📸 اضغط هنا لرفع صورتك الشخصية</span>
                     <img id="preview-img" src="" alt="صورتك" style="display:none;">
                 </label>
-                <button class="ai-action-btn" onclick="simulateAI()">اقتراح طقم مناسب من مدى</button>
+
+                <div class="body-inputs">
+                    <div class="input-row">
+                        <input type="number" id="user-height" placeholder="الطول (سم) مثلاً: 170">
+                        <input type="number" id="user-weight" placeholder="الوزن (كجم) مثلاً: 65">
+                    </div>
+                    <select id="user-body">
+                        <option value="" disabled selected>اختر هيئة الجسم</option>
+                        <option value="نحيف">نحيف (Slim)</option>
+                        <option value="متناسق">متناسق (Athletic / Regular)</option>
+                        <option value="ممتلئ">ممتلئ (Curvy / Plus)</option>
+                    </select>
+                </div>
+
+                <button class="ai-action-btn" onclick="simulateAI()">تحليل المقاس واقتراح أطقم متناسقة ✨</button>
             </div>
+
+            <!-- مربع ترشيحات الأطقم المتناسقة -->
             <div class="ai-result" id="ai-result-box">
-                <h3>ترشيحات الـ AI ليك</h3>
-                <p id="ai-status">ارفع صورتك عشان نختارلك أنسب قطعة من تشكيلة مدى...</p>
+                <h3>ترشيحات الـ AI الخاصة بيك</h3>
+                <div id="ai-status">
+                    <div class="empty-ai-state">
+                        <span>👔</span>
+                        <p>ارفع صورتك ودخل طولك ووزنك وهيئة جسمك عشان الـ AI يقترحلك 3 أطقم متناسقة وتجرب اللي يعجبك على صورتك.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- قسم المنتجات -->
     <section id="collection" class="products-section">
-        <h2>تشكيلة مدى</h2>
+        <div class="section-header">
+            <h2>تشكيلة مدى الحصرية</h2>
+            <p>اختر المقاس واللون المفضل ليك من ألوان الموسم</p>
+        </div>
         
         <!-- أزرار الفلترة -->
         <div class="filter-btns">
@@ -64,7 +103,13 @@
         </div>
     </section>
 
-    <!-- سلة المشتريات الجانبية + فورم الشحن -->
+    <!-- فوتر البراند -->
+    <footer>
+        <div class="footer-logo">مدى | MADA</div>
+        <p>جميع الحقوق محفوظة لبراند مدى © 2026</p>
+    </footer>
+
+    <!-- سلة المشتريات الجانبية -->
     <div class="cart-sidebar" id="cart-sidebar">
         <div class="cart-header">
             <h3>سلة مشتريات مدى</h3>
@@ -78,7 +123,6 @@
         <div class="cart-footer">
             <h4>الإجمالي: <span id="cart-total">0</span> ج.م</h4>
             
-            <!-- فورم بيانات الشحن -->
             <div class="shipping-form">
                 <input type="text" id="customer-name" placeholder="الاسم بالكامل">
                 <input type="tel" id="customer-phone" placeholder="رقم الموبايل (واتساب)">
@@ -92,3 +136,5 @@
     <script src="script.js"></script>
 </body>
 </html>
+
+

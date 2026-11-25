@@ -1,104 +1,82 @@
+const fallbackImage = "image/hoodie.men.jpeg.jpeg";
+
 const products = [
-    { 
-        id: 1, 
-        name: "هودي مدى كلاسيك - برجاندي", 
-        category: "men", 
-        catName: "هودي رجالي",
-        price: 850, 
-       img: "image/hoodie.men.jpeg.jpeg"
-
- 
-    },
-    { 
-        id: 2, 
-        name: "هودي أوفر سايز - أوف وايت", 
-        category: "women", 
-        catName: "هودي حريمي",
-        price: 820, 
-        img: "https://unsplash.com" 
-    },
-    { 
-        id: 3, 
-        name: "سويت بانتس مريح - بيج", 
-        category: "men", 
-        catName: "سويت بانتس رجالي",
-        price: 650, 
-        img: "https://unsplash.com" 
-    },
-    { 
-        id: 4, 
-        name: "سويت بانتس وايد ليج - بني", 
-        category: "women", 
-        catName: "سويت بانتس حريمي",
-        price: 680, 
-        img: "image/pans-women.jpeg" 
-    },
-    { 
-        id: 5, 
-        name: "سوت حريمي كامل - بني موكا", 
-        category: "suits", 
-        catName: "سوتات حريمي",
-        price: 1450, 
-       img: "image/suit-women.jpeg"
-
-    },
-    { 
-        id: 6, 
-        name: "سوت حريمي كاجوال - أبيض كريمي", 
-        category: "suits", 
-        catName: "سوتات حريمي",
-        price: 1380, 
-        img: "https://unsplash.com" 
-    }
+    { id: 1, name: "هودي مدى كلاسيك", category: "men", catName: "هودي رجالي", price: 850, img: "image/hoodie.men.jpeg.jpeg" },
+    { id: 2, name: "هودي أوفر سايز", category: "women", catName: "هودي حريمي", price: 820, img: "image/hoodie.women2.jpeg" },
+    { id: 3, name: "سويت بانتس مريح", category: "men", catName: "سويت بانتس رجالي", price: 650, img: "image/suit-men.jpeg" },
+    { id: 4, name: "سويت بانتس وايد ليج", category: "women", catName: "سويت بانتس حريمي", price: 680, img: "image/pans-women.jpeg" },
+    { id: 5, name: "سوت حريمي كامل", category: "suits", catName: "سوتات حريمي", price: 1450, img: "image/suit-women.jpeg" },
+    { id: 6, name: "سوت حريمي كاجوال", category: "suits", catName: "سوتات حريمي", price: 1380, img: "suit-women2.jpeg" }
 ];
 
 let cart = [];
 
-// عرض المنتجات مع قائمة اختيار المقاس
 function displayProducts(filter = 'all') {
     const productsGrid = document.getElementById('products-grid');
-    productsGrid.innerHTML = '';
+    if (!productsGrid) return;
 
-    const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+    const filtered = filter === 'all' ? products : products.filter(product => product.category === filter);
 
-    filtered.forEach(product => {
-        productsGrid.innerHTML += `
-            <div class="product-card">
-                <img src="${product.img}" alt="${product.name}" class="product-img">
-                <div class="product-info">
-                    <span class="product-category">${product.catName}</span>
-                    <h3>${product.name}</h3>
-                    <div class="product-price">${product.price} ج.م</div>
-                    
-                    <div class="size-selector">
+    productsGrid.innerHTML = filtered.map(product => `
+        <article class="product-card">
+            <img src="${product.img}" alt="${product.name}" class="product-img" onerror="this.onerror=null;this.src='${fallbackImage}'">
+            <div class="product-info">
+                <span class="product-category">${product.catName}</span>
+                <h3>${product.name}</h3>
+                <div class="product-price">${product.price} ج.م</div>
+
+                <div class="options-row">
+                    <div class="option-box">
                         <label for="size-${product.id}">المقاس:</label>
-                        <select id="size-${product.id}">
+                        <select id="size-${product.id}" aria-label="مقاس ${product.name}">
+                            <option value="XS">XS</option>
                             <option value="S">S</option>
                             <option value="M" selected>M</option>
                             <option value="L">L</option>
                             <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
                         </select>
                     </div>
 
-                    <div class="btn-group">
-                        <button class="btn-add" onclick="addToCart(${product.id})">أضف للسلة</button>
-                        <button class="btn-try" onclick="tryOnProduct('${product.name}')">جربه بالـ AI</button>
+                    <div class="option-box">
+                        <label for="color-${product.id}">اللون:</label>
+                        <select id="color-${product.id}" aria-label="لون ${product.name}">
+                            <option value="برجاندي">برجاندي</option>
+                            <option value="أسود">أسود</option>
+                            <option value="جراي">جراي</option>
+                            <option value="زيتي">زيتي</option>
+                            <option value="بني" selected>بني</option>
+                            <option value="بيج">بيج</option>
+                        </select>
                     </div>
                 </div>
-            </div>
-        `;
-    });
-}
 
-displayProducts();
+                <div class="btn-group">
+                    <button class="btn-add" type="button" onclick="addToCart(${product.id})">أضف للسلة</button>
+                    <button class="btn-try" type="button" onclick="tryOnProduct('${product.name}', document.getElementById('color-${product.id}').value)">جربه بالـ AI</button>
+                </div>
+            </div>
+        </article>
+    `).join('');
+}
 
 function filterProducts(category) {
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    if (window.event && window.event.currentTarget) {
+        window.event.currentTarget.classList.add('active');
+    } else {
+        const labels = { all: 'الكل', men: 'رجالي', women: 'حريمي', suits: 'سوتات حريمي' };
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            if (btn.textContent.trim() === labels[category]) btn.classList.add('active');
+        });
+    }
     displayProducts(category);
 }
 
 function previewImage(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
     const reader = new FileReader();
     reader.onload = function() {
         const output = document.getElementById('preview-img');
@@ -106,60 +84,85 @@ function previewImage(event) {
         output.style.display = 'block';
         document.getElementById('upload-text').style.display = 'none';
     };
-    if(event.target.files && event.target.files[0]) {
-        reader.readAsDataURL(event.target.files[0]);
-    }
+    reader.readAsDataURL(file);
 }
 
 function simulateAI() {
-    const img = document.getElementById('preview-img');
+    const heightInput = document.getElementById('user-height');
+    const weightInput = document.getElementById('user-weight');
+    const bodyInput = document.getElementById('user-body');
+    const height = Number(heightInput.value);
+    const weight = Number(weightInput.value);
+    const bodyType = bodyInput.value;
     const status = document.getElementById('ai-status');
-    
-    if (img.style.display === 'none') {
-        alert("من فضلك ارفع صورتك الأول عشان الـ AI يختارلك!");
+
+    if (!height || !weight || !bodyType) {
+        alert('من فضلك اكتب الطول والوزن واختر هيئة الجسم الأول!');
         return;
     }
 
-    status.innerHTML = "⏳ جاري تحليل صورتك واختيار أنسب قطعة من مدى...";
-    
+    status.innerHTML = "<p class='ai-loading'>⏳ جاري تحليل قياسات جسمك واقتراح أطقم متناسقة...</p>";
+
+    let recommendedSize = 'M';
+    if (weight < 60) recommendedSize = 'S';
+    else if (weight < 75) recommendedSize = 'M';
+    else if (weight < 90) recommendedSize = 'L';
+    else recommendedSize = 'XL';
+
+    if (bodyType === 'ممتلئ' && recommendedSize !== 'XL') {
+        recommendedSize = recommendedSize === 'S' ? 'M' : recommendedSize === 'M' ? 'L' : 'XL';
+    }
+
     setTimeout(() => {
         status.innerHTML = `
-            <strong style="color:#4A3525;">✅ تم التحليل بنجاح!</strong><br><br>
-            بنرشحلك من تشكيلة مدى: <b>سوت حريمي كامل - بني موكا</b> أو <b>هودي أوفر سايز أوف وايت</b>.<br>
-            <small style="color:#7D7068;">(جاهز للربط مع سيرفر الـ AI لدمج القطع على صورتك)</small>
+            <div class="ai-recommendation-head">
+                <strong>✅ مقاسك المثالي في مدى:</strong>
+                <span class="size-badge">${recommendedSize}</span>
+                <small>اختر طقمًا من الاقتراحات وتجربته على صورتك</small>
+            </div>
+            <div class="outfit-card"><h4>1️⃣ طقم كلاسيك دافئ (هودي بني + سويت بانتس بيج)</h4><p>تناسق مناسب لهيئة الجسم (${bodyType}).</p><button type="button" class="try-outfit-btn" onclick="applyOutfitToPhoto('هودي بني + سويت بانتس بيج', '${recommendedSize}')">جرب الطقم على صورتك ✨</button></div>
+            <div class="outfit-card"><h4>2️⃣ طقم كاجوال عصري (هودي برجاندي + سويت بانتس جراي)</h4><p>ألوان جريئة ومتوازنة للاستخدام اليومي.</p><button type="button" class="try-outfit-btn" onclick="applyOutfitToPhoto('هودي برجاندي + سويت بانتس جراي', '${recommendedSize}')">جرب الطقم على صورتك ✨</button></div>
+            <div class="outfit-card"><h4>3️⃣ طقم إيرث تون (هودي زيتي + سويت بانتس أسود)</h4><p>إطلالة عملية تناسب طولك (${height} سم).</p><button type="button" class="try-outfit-btn" onclick="applyOutfitToPhoto('هودي زيتي + سويت بانتس أسود', '${recommendedSize}')">جرب الطقم على صورتك ✨</button></div>
         `;
-    }, 1800);
+    }, 1300);
 }
 
-function tryOnProduct(productName) {
+function applyOutfitToPhoto(outfitName, size) {
+    const img = document.getElementById('preview-img');
+    if (!img || img.style.display === 'none' || !img.src) {
+        alert('من فضلك ارفع صورتك الأول في مربع الصورة لتجربة الطقم!');
+        return;
+    }
+    alert(`✨ تم اختيار (${outfitName}) بمقاس (${size}) لتجربته على صورتك.`);
+}
+
+function tryOnProduct(productName, color) {
     document.getElementById('ai-studio').scrollIntoView({ behavior: 'smooth' });
     const img = document.getElementById('preview-img');
     const status = document.getElementById('ai-status');
 
-    if (img.style.display === 'none') {
-        status.innerHTML = `ارفع صورتك في المربع اللي على اليمين عشان تشوف <b>${productName}</b> عليك!`;
+    if (!img || img.style.display === 'none' || !img.src) {
+        status.innerHTML = `<div class="empty-ai-state"><p>ارفع صورتك عشان تشوف <b>${productName} - لون ${color}</b> عليك!</p></div>`;
     } else {
-        status.innerHTML = `⏳ جاري تجربة <b>${productName}</b> على صورتك...`;
+        status.innerHTML = `<div class="empty-ai-state"><p>⏳ جاري تجربة <b>${productName} - لون ${color}</b> على صورتك...</p></div>`;
         setTimeout(() => {
-            status.innerHTML = `✨ تم دمج <b>${productName}</b> من مدى على صورتك!`;
-        }, 1500);
+            status.innerHTML = `<div class="empty-ai-state"><p class="success-message">✨ تم اختيار <b>${productName} - لون ${color}</b> للتجربة على صورتك!</p></div>`;
+        }, 1200);
     }
 }
 
-// التحكم في السلة وإضافة المنتج بالمقاس المختار
 function toggleCart() {
     document.getElementById('cart-sidebar').classList.toggle('active');
 }
 
 function addToCart(id) {
-    const item = products.find(p => p.id === id);
+    const item = products.find(product => product.id === id);
+    if (!item) return;
+
     const selectedSize = document.getElementById(`size-${id}`).value;
-    
-    cart.push({
-        ...item,
-        size: selectedSize
-    });
-    
+    const selectedColor = document.getElementById(`color-${id}`).value;
+
+    cart.push({ ...item, size: selectedSize, color: selectedColor });
     updateCart();
 }
 
@@ -167,27 +170,18 @@ function updateCart() {
     document.getElementById('cart-count').innerText = cart.length;
     const cartItems = document.getElementById('cart-items');
     const cartTotal = document.getElementById('cart-total');
-    
+
     if (cart.length === 0) {
-        cartItems.innerHTML = "<p>السلة فاضية حالياً</p>";
-        cartTotal.innerText = "0";
+        cartItems.innerHTML = '<p>السلة فاضية حالياً</p>';
+        cartTotal.innerText = '0';
         return;
     }
 
     let total = 0;
-    cartItems.innerHTML = "";
-    cart.forEach((item, index) => {
+    cartItems.innerHTML = cart.map((item, index) => {
         total += item.price;
-        cartItems.innerHTML += `
-            <div class="cart-item">
-                <div>
-                    <b>${item.name}</b><br>
-                    <small style="color:#7A5C43;">المقاس: ${item.size}</small>
-                </div>
-                <span>${item.price} ج.م <b style="color:#b02a37;cursor:pointer;margin-right:5px;" onclick="removeFromCart(${index})">✖</b></span>
-            </div>
-        `;
-    });
+        return `<div class="cart-item"><div><b>${item.name}</b><br><small>المقاس: ${item.size} | اللون: ${item.color}</small></div><span>${item.price} ج.م <b class="remove-item" onclick="removeFromCart(${index})">✖</b></span></div>`;
+    }).join('');
     cartTotal.innerText = total;
 }
 
@@ -196,26 +190,22 @@ function removeFromCart(index) {
     updateCart();
 }
 
-// التحقق من بيانات العميل عند تأكيد الأوردر
 function checkout() {
-    if (cart.length === 0) return alert("السلة فاضية!");
+    if (cart.length === 0) {
+        alert('السلة فاضية!');
+        return;
+    }
 
     const name = document.getElementById('customer-name').value.trim();
     const phone = document.getElementById('customer-phone').value.trim();
     const address = document.getElementById('customer-address').value.trim();
 
     if (!name || !phone || !address) {
-        alert("من فضلك اكتب اسمك ورقم موبايلك وعنوانك بالكامل لإتمام الأوردر.");
+        alert('من فضلك أدخل الاسم ورقم الموبايل والعنوان لإتمام الأوردر.');
         return;
     }
 
-    alert(`شكراً يا ${name}! تم استلام أوردرك من براند مدى بنجاح 🔒\nهنتواصل معاك على رقم ${phone} لتأكيد الشحن.`);
-    
-    // تفريغ السلة والبيانات بعد الطلب
-    cart = [];
-    updateCart();
-    document.getElementById('customer-name').value = '';
-    document.getElementById('customer-phone').value = '';
-    document.getElementById('customer-address').value = '';
-    toggleCart();
+    alert(`تم استلام أوردرك يا ${name} بنجاح! سيتواصل معك فريق مدى على ${phone}.`);
 }
+
+displayProducts();
